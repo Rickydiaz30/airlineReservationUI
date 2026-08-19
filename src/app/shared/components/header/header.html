@@ -1,0 +1,109 @@
+<header class="relative z-50">
+  <nav class="flex items-center justify-between" aria-label="Main navigation">
+    <!-- Brand -->
+    <a routerLink="/" class="flex items-center gap-3 text-white" aria-label="Nimbus Airways home">
+      <div
+        class="flex h-11 w-11 items-center justify-center rounded-2xl border border-white/30 bg-white/15 shadow-lg backdrop-blur-md"
+      >
+        <svg lucidePlane class="h-6 w-6"></svg>
+      </div>
+
+      <div>
+        <p class="text-xl font-bold leading-none tracking-wide">Nimbus</p>
+
+        <p class="mt-1 text-[10px] font-medium uppercase tracking-[0.35em] text-sky-100">Airways</p>
+      </div>
+    </a>
+
+    <!-- Desktop Navigation -->
+    <div class="hidden items-center gap-2 md:flex">
+      <a
+        routerLink="/"
+        routerLinkActive="bg-white/20 text-white"
+        [routerLinkActiveOptions]="{ exact: true }"
+        class="flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-semibold text-white/80 transition hover:bg-white/15 hover:text-white"
+      >
+        <svg lucideHouse class="h-4 w-4"></svg>
+        Home
+      </a>
+
+      <a
+        routerLink="/flights"
+        routerLinkActive="bg-white/20 text-white"
+        class="flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-semibold text-white/80 transition hover:bg-white/15 hover:text-white"
+      >
+        <svg lucideSearch class="h-4 w-4"></svg>
+        Find Flights
+      </a>
+
+      <a
+        routerLink="/my-booking"
+        routerLinkActive="bg-white/20 text-white"
+        class="flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-semibold text-white/80 transition hover:bg-white/15 hover:text-white"
+      >
+        <svg lucideTicket class="h-4 w-4"></svg>
+        My Booking
+      </a>
+    </div>
+
+    <!-- Mobile Hamburger -->
+    <button
+      type="button"
+      (click)="toggleMenu()"
+      class="flex h-11 w-11 items-center justify-center rounded-full border border-white/30 bg-white/15 text-white shadow-lg backdrop-blur-md transition hover:bg-white/25 active:scale-95 md:hidden"
+      aria-label="Toggle navigation menu"
+      [attr.aria-expanded]="menuOpen"
+    >
+      @if (menuOpen) {
+        <svg lucideX class="h-6 w-6"></svg>
+      } @else {
+        <svg lucideMenu class="h-6 w-6"></svg>
+      }
+    </button>
+  </nav>
+
+  <!-- Mobile Menu -->
+  @if (menuOpen) {
+    <div
+      class="absolute left-0 right-0 top-16 overflow-hidden rounded-3xl border border-white/40 bg-white/95 p-3 shadow-2xl shadow-sky-950/30 backdrop-blur-xl md:hidden"
+    >
+      <div class="flex flex-col gap-1">
+        <!-- Home -->
+        <a
+          routerLink="/"
+          routerLinkActive="bg-sky-100 text-sky-700"
+          [routerLinkActiveOptions]="{ exact: true }"
+          (click)="closeMenu()"
+          class="flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-semibold text-slate-700 transition hover:bg-sky-50 hover:text-sky-700"
+        >
+          <svg lucideHouse class="h-5 w-5"></svg>
+          Home
+        </a>
+
+        <!-- Find Flights -->
+        <a
+          routerLink="/flights"
+          routerLinkActive="bg-sky-100 text-sky-700"
+          (click)="closeMenu()"
+          class="flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-semibold text-slate-700 transition hover:bg-sky-50 hover:text-sky-700"
+        >
+          <svg lucideSearch class="h-5 w-5"></svg>
+          Find Flights
+        </a>
+
+        <div class="my-1 border-t border-slate-200"></div>
+
+        <!-- My Booking -->
+        <a
+          routerLink="/my-booking"
+          routerLinkActive="bg-sky-100 text-sky-700"
+          (click)="closeMenu()"
+          class="flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-semibold text-slate-700 transition hover:bg-sky-50 hover:text-sky-700"
+        >
+          <svg lucideTicket class="h-5 w-5"></svg>
+          My Booking
+        </a>
+      </div>
+    </div>
+  }
+</header>

@@ -1,0 +1,168 @@
+<form class="space-y-4">
+  <!-- Trip Type -->
+  <div class="flex rounded-2xl bg-slate-100 p-1">
+    <button
+      type="button"
+      (click)="roundTrip = false"
+      [class.bg-white]="!roundTrip"
+      [class.text-sky-700]="!roundTrip"
+      [class.shadow-sm]="!roundTrip"
+      class="flex-1 rounded-xl px-4 py-2 text-sm font-semibold text-slate-500 transition"
+    >
+      One Way
+    </button>
+
+    <button
+      type="button"
+      (click)="roundTrip = true"
+      [class.bg-white]="roundTrip"
+      [class.text-sky-700]="roundTrip"
+      [class.shadow-sm]="roundTrip"
+      class="flex-1 rounded-xl px-4 py-2 text-sm font-semibold text-slate-500 transition"
+    >
+      Round Trip
+    </button>
+  </div>
+
+  <!-- Origin -->
+  <div>
+    <label
+      for="origin"
+      class="mb-2 block text-xs font-bold uppercase tracking-wider text-slate-500"
+    >
+      From
+    </label>
+
+    <div
+      class="flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4 transition focus-within:border-sky-500 focus-within:bg-white focus-within:ring-4 focus-within:ring-sky-100"
+    >
+      <svg lucidePlaneTakeoff class="h-5 w-5 shrink-0 text-sky-600"></svg>
+
+      <input
+        id="origin"
+        name="origin"
+        type="text"
+        [(ngModel)]="search.origin"
+        placeholder="Where are you flying from?"
+        class="w-full bg-transparent text-sm font-medium text-slate-900 outline-none placeholder:font-normal placeholder:text-slate-400"
+      />
+    </div>
+  </div>
+
+  <!-- Destination -->
+  <div>
+    <label
+      for="destination"
+      class="mb-2 block text-xs font-bold uppercase tracking-wider text-slate-500"
+    >
+      To
+    </label>
+
+    <div
+      class="flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4 transition focus-within:border-sky-500 focus-within:bg-white focus-within:ring-4 focus-within:ring-sky-100"
+    >
+      <svg lucideMapPin class="h-5 w-5 shrink-0 text-sky-600"></svg>
+
+      <input
+        id="destination"
+        name="destination"
+        type="text"
+        [(ngModel)]="search.destination"
+        placeholder="Where do you want to go?"
+        class="w-full bg-transparent text-sm font-medium text-slate-900 outline-none placeholder:font-normal placeholder:text-slate-400"
+      />
+    </div>
+  </div>
+
+  <!-- Dates -->
+  <div class="grid grid-cols-1 gap-4" [class.sm:grid-cols-2]="roundTrip">
+    <!-- Departure -->
+    <div>
+      <label
+        for="departureDate"
+        class="mb-2 block text-xs font-bold uppercase tracking-wider text-slate-500"
+      >
+        Departure
+      </label>
+
+      <div
+        class="flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4 transition focus-within:border-sky-500 focus-within:bg-white focus-within:ring-4 focus-within:ring-sky-100"
+      >
+        <svg lucideCalendarDays class="h-5 w-5 shrink-0 text-sky-600"></svg>
+
+        <input
+          id="departureDate"
+          name="departureDate"
+          type="date"
+          [(ngModel)]="search.departureDate"
+          class="w-full bg-transparent text-sm font-medium text-slate-700 outline-none"
+        />
+      </div>
+    </div>
+
+    <!-- Return -->
+    @if (roundTrip) {
+      <div>
+        <label
+          for="returnDate"
+          class="mb-2 block text-xs font-bold uppercase tracking-wider text-slate-500"
+        >
+          Return
+        </label>
+
+        <div
+          class="flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4 transition focus-within:border-sky-500 focus-within:bg-white focus-within:ring-4 focus-within:ring-sky-100"
+        >
+          <svg lucideCalendarDays class="h-5 w-5 shrink-0 text-sky-600"></svg>
+
+          <input
+            id="returnDate"
+            name="returnDate"
+            type="date"
+            [(ngModel)]="search.returnDate"
+            class="w-full bg-transparent text-sm font-medium text-slate-700 outline-none"
+          />
+        </div>
+      </div>
+    }
+  </div>
+
+  <!-- Travelers -->
+  <div>
+    <label
+      for="travelers"
+      class="mb-2 block text-xs font-bold uppercase tracking-wider text-slate-500"
+    >
+      Travelers
+    </label>
+
+    <div
+      class="flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4 transition focus-within:border-sky-500 focus-within:bg-white focus-within:ring-4 focus-within:ring-sky-100"
+    >
+      <svg lucideUsers class="h-5 w-5 shrink-0 text-sky-600"></svg>
+
+      <input
+        id="travelers"
+        name="travelers"
+        type="number"
+        min="1"
+        max="9"
+        [(ngModel)]="search.travelers"
+        class="w-full bg-transparent text-sm font-medium text-slate-700 outline-none"
+      />
+
+      <span class="text-xs font-medium text-slate-400"> passengers </span>
+    </div>
+  </div>
+
+  <!-- Search -->
+  <button
+    type="button"
+    (click)="searchFlights()"
+    class="group mt-2 flex w-full items-center justify-center gap-2 rounded-2xl bg-sky-600 px-5 py-4 text-sm font-bold text-white shadow-lg shadow-sky-600/25 transition duration-200 hover:bg-sky-700 hover:shadow-xl hover:shadow-sky-600/30 active:scale-[0.98]"
+  >
+    <svg lucideSearch class="h-5 w-5 transition-transform duration-200 group-hover:scale-110"></svg>
+
+    Search Flights
+  </button>
+</form>
