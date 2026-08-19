@@ -27,6 +27,7 @@ import { FlightSearch } from '../../../models/flight-search';
 })
 export class SearchForm {
   roundTrip: boolean = false;
+
   search: FlightSearch = {
     origin: '',
     destination: '',
@@ -34,6 +35,21 @@ export class SearchForm {
     returnDate: '',
     travelers: 1,
   };
+
+  airports = [
+    { code: 'DEN', city: 'Denver' },
+    { code: 'MCO', city: 'Orlando' },
+    { code: 'LAS', city: 'Las Vegas' },
+    { code: 'LAX', city: 'Los Angeles' },
+    { code: 'SEA', city: 'Seattle' },
+    { code: 'ORD', city: 'Chicago' },
+    { code: 'JFK', city: 'New York' },
+    { code: 'ATL', city: 'Atlanta' },
+    { code: 'DFW', city: 'Dallas' },
+    { code: 'PHX', city: 'Phoenix' },
+    { code: 'SFO', city: 'San Francisco' },
+    { code: 'OMA', city: 'Omaha' },
+  ];
 
   constructor(private router: Router) {}
 

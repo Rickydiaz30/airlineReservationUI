@@ -38,14 +38,18 @@
     >
       <svg lucidePlaneTakeoff class="h-5 w-5 shrink-0 text-sky-600"></svg>
 
-      <input
+      <select
         id="origin"
         name="origin"
-        type="text"
         [(ngModel)]="search.origin"
-        placeholder="Where are you flying from?"
-        class="w-full bg-transparent text-sm font-medium text-slate-900 outline-none placeholder:font-normal placeholder:text-slate-400"
-      />
+        class="w-full appearance-auto bg-transparent text-sm font-medium text-slate-900 outline-none"
+      >
+        <option value="" disabled>Select departure airport</option>
+
+        @for (airport of airports; track airport.code) {
+          <option [value]="airport.code">{{ airport.code }} — {{ airport.city }}</option>
+        }
+      </select>
     </div>
   </div>
 
@@ -63,14 +67,18 @@
     >
       <svg lucideMapPin class="h-5 w-5 shrink-0 text-sky-600"></svg>
 
-      <input
+      <select
         id="destination"
         name="destination"
-        type="text"
         [(ngModel)]="search.destination"
-        placeholder="Where do you want to go?"
-        class="w-full bg-transparent text-sm font-medium text-slate-900 outline-none placeholder:font-normal placeholder:text-slate-400"
-      />
+        class="w-full appearance-auto bg-transparent text-sm font-medium text-slate-900 outline-none"
+      >
+        <option value="" disabled>Select destination</option>
+
+        @for (airport of airports; track airport.code) {
+          <option [value]="airport.code">{{ airport.code }} — {{ airport.city }}</option>
+        }
+      </select>
     </div>
   </div>
 
