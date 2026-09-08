@@ -1,0 +1,235 @@
+<section class="py-8 text-white">
+  <!-- Heading -->
+  <div class="mb-8 text-center">
+    <p class="text-xs font-bold uppercase tracking-[0.2em] text-cyan-100">Join Group 3 Airways</p>
+
+    <h1 class="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">Create Your Account</h1>
+
+    <p class="mt-2 text-sm text-white/80 sm:text-base">
+      Register to manage your reservations and itineraries.
+    </p>
+  </div>
+
+  <!-- Registration Card -->
+  <div
+    class="mx-auto max-w-xl rounded-[2rem] border border-white/50 bg-white/90 p-6 text-slate-900 shadow-2xl shadow-sky-950/30 backdrop-blur-xl sm:p-8"
+  >
+    <form #registerForm="ngForm" class="space-y-5" (ngSubmit)="register()">
+      <!-- First and Last Name -->
+      <div class="grid gap-4 sm:grid-cols-2">
+        <div>
+          <label
+            for="firstName"
+            class="mb-2 block text-xs font-bold uppercase tracking-wider text-slate-500"
+          >
+            First Name
+          </label>
+
+          <input
+            #firstName="ngModel"
+            id="firstName"
+            name="firstName"
+            type="text"
+            required
+            autocomplete="given-name"
+            [(ngModel)]="form.firstName"
+            class="w-full rounded-2xl border bg-slate-50 px-4 py-3 outline-none transition focus:bg-white focus:ring-4"
+            [class.border-red-400]="firstName.invalid && firstName.touched"
+            [class.focus:border-red-500]="firstName.invalid && firstName.touched"
+            [class.focus:ring-red-100]="firstName.invalid && firstName.touched"
+            [class.border-slate-200]="firstName.valid || firstName.untouched"
+            [class.focus:border-sky-500]="firstName.valid || firstName.untouched"
+            [class.focus:ring-sky-100]="firstName.valid || firstName.untouched"
+          />
+
+          @if (firstName.invalid && firstName.touched) {
+            <p class="mt-2 text-xs font-medium text-red-600">First name is required.</p>
+          }
+        </div>
+
+        <div>
+          <label
+            for="lastName"
+            class="mb-2 block text-xs font-bold uppercase tracking-wider text-slate-500"
+          >
+            Last Name
+          </label>
+
+          <input
+            #lastName="ngModel"
+            id="lastName"
+            name="lastName"
+            type="text"
+            required
+            autocomplete="family-name"
+            [(ngModel)]="form.lastName"
+            class="w-full rounded-2xl border bg-slate-50 px-4 py-3 outline-none transition focus:bg-white focus:ring-4"
+            [class.border-red-400]="lastName.invalid && lastName.touched"
+            [class.focus:border-red-500]="lastName.invalid && lastName.touched"
+            [class.focus:ring-red-100]="lastName.invalid && lastName.touched"
+            [class.border-slate-200]="lastName.valid || lastName.untouched"
+            [class.focus:border-sky-500]="lastName.valid || lastName.untouched"
+            [class.focus:ring-sky-100]="lastName.valid || lastName.untouched"
+          />
+
+          @if (lastName.invalid && lastName.touched) {
+            <p class="mt-2 text-xs font-medium text-red-600">Last name is required.</p>
+          }
+        </div>
+      </div>
+
+      <!-- Email -->
+      <div>
+        <label
+          for="email"
+          class="mb-2 block text-xs font-bold uppercase tracking-wider text-slate-500"
+        >
+          Email
+        </label>
+
+        <input
+          #email="ngModel"
+          id="email"
+          name="email"
+          type="email"
+          required
+          email
+          autocomplete="email"
+          [(ngModel)]="form.email"
+          class="w-full rounded-2xl border bg-slate-50 px-4 py-3 outline-none transition focus:bg-white focus:ring-4"
+          [class.border-red-400]="email.invalid && email.touched"
+          [class.focus:border-red-500]="email.invalid && email.touched"
+          [class.focus:ring-red-100]="email.invalid && email.touched"
+          [class.border-slate-200]="email.valid || email.untouched"
+          [class.focus:border-sky-500]="email.valid || email.untouched"
+          [class.focus:ring-sky-100]="email.valid || email.untouched"
+        />
+
+        @if (email.errors?.['required'] && email.touched) {
+          <p class="mt-2 text-xs font-medium text-red-600">Email is required.</p>
+        } @else if (email.errors?.['email'] && email.touched) {
+          <p class="mt-2 text-xs font-medium text-red-600">Enter a valid email address.</p>
+        }
+      </div>
+
+      <!-- Password -->
+      <div>
+        <label
+          for="password"
+          class="mb-2 block text-xs font-bold uppercase tracking-wider text-slate-500"
+        >
+          Password
+        </label>
+
+        <input
+          #password="ngModel"
+          id="password"
+          name="password"
+          type="password"
+          required
+          minlength="8"
+          autocomplete="new-password"
+          [(ngModel)]="form.password"
+          class="w-full rounded-2xl border bg-slate-50 px-4 py-3 outline-none transition focus:bg-white focus:ring-4"
+          [class.border-red-400]="password.invalid && password.touched"
+          [class.focus:border-red-500]="password.invalid && password.touched"
+          [class.focus:ring-red-100]="password.invalid && password.touched"
+          [class.border-slate-200]="password.valid || password.untouched"
+          [class.focus:border-sky-500]="password.valid || password.untouched"
+          [class.focus:ring-sky-100]="password.valid || password.untouched"
+        />
+
+        @if (password.errors?.['required'] && password.touched) {
+          <p class="mt-2 text-xs font-medium text-red-600">Password is required.</p>
+        } @else if (password.errors?.['minlength'] && password.touched) {
+          <p class="mt-2 text-xs font-medium text-red-600">
+            Password must be at least 8 characters.
+          </p>
+        }
+      </div>
+
+      <!-- Confirm Password -->
+      <div>
+        <label
+          for="confirmPassword"
+          class="mb-2 block text-xs font-bold uppercase tracking-wider text-slate-500"
+        >
+          Confirm Password
+        </label>
+
+        <input
+          #confirmPasswordControl="ngModel"
+          id="confirmPassword"
+          name="confirmPassword"
+          type="password"
+          required
+          autocomplete="new-password"
+          [(ngModel)]="confirmPassword"
+          class="w-full rounded-2xl border bg-slate-50 px-4 py-3 outline-none transition focus:bg-white focus:ring-4"
+          [class.border-red-400]="
+            confirmPasswordControl.touched &&
+            (confirmPasswordControl.invalid || confirmPassword !== form.password)
+          "
+          [class.focus:border-red-500]="
+            confirmPasswordControl.touched &&
+            (confirmPasswordControl.invalid || confirmPassword !== form.password)
+          "
+          [class.focus:ring-red-100]="
+            confirmPasswordControl.touched &&
+            (confirmPasswordControl.invalid || confirmPassword !== form.password)
+          "
+          [class.border-slate-200]="
+            confirmPasswordControl.untouched ||
+            (confirmPasswordControl.valid && confirmPassword === form.password)
+          "
+          [class.focus:border-sky-500]="
+            confirmPasswordControl.untouched ||
+            (confirmPasswordControl.valid && confirmPassword === form.password)
+          "
+          [class.focus:ring-sky-100]="
+            confirmPasswordControl.untouched ||
+            (confirmPasswordControl.valid && confirmPassword === form.password)
+          "
+        />
+
+        @if (confirmPasswordControl.errors?.['required'] && confirmPasswordControl.touched) {
+          <p class="mt-2 text-xs font-medium text-red-600">Please confirm your password.</p>
+        } @else if (confirmPasswordControl.touched && confirmPassword !== form.password) {
+          <p class="mt-2 text-xs font-medium text-red-600">Passwords do not match.</p>
+        }
+      </div>
+
+      <!-- Submission Error -->
+      @if (errorMessage) {
+        <div
+          role="alert"
+          class="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700"
+        >
+          {{ errorMessage }}
+        </div>
+      }
+
+      <!-- Submit -->
+      <button
+        type="submit"
+        [disabled]="registerForm.invalid || form.password !== confirmPassword || isSubmitting"
+        class="w-full rounded-2xl bg-sky-600 px-5 py-4 text-sm font-bold text-white shadow-lg shadow-sky-600/25 transition hover:bg-sky-700 hover:shadow-xl active:scale-[0.98] disabled:cursor-not-allowed disabled:bg-slate-300 disabled:shadow-none"
+      >
+        @if (isSubmitting) {
+          Creating Account...
+        } @else {
+          Create Account
+        }
+      </button>
+
+      <!-- Login Link -->
+      <p class="text-center text-sm text-slate-500">
+        Already have an account?
+
+        <a routerLink="/login" class="font-bold text-sky-600 transition hover:text-sky-700">
+          Sign in
+        </a>
+      </p>
+    </form>
+  </div>
+</section>

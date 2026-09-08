@@ -5,6 +5,8 @@ import { FlightResults } from './features/flight-results/flight-results';
 import { Booking } from './features/booking/booking';
 import { Confirmation } from './features/confirmation/confirmation';
 import { Itinerary } from './features/itinerary/itinerary';
+import { Register } from './features/auth/register/register';
+import { Login } from './features/auth/login/login';
 
 export const routes: Routes = [
   {
@@ -26,5 +28,13 @@ export const routes: Routes = [
   {
     path: 'my-booking',
     component: Itinerary,
+  },
+  {
+    path: 'register',
+    component: Register,
+  },
+  {
+    path: 'login',
+    component: Login,
   },
 ];

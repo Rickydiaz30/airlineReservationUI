@@ -5,10 +5,11 @@ import { ReservationService } from '../../core/services/reservation-service';
 import { Flight } from '../../models/flight';
 import { Passenger } from '../../models/passenger';
 import { FlightService } from '../../core/services/flight-service';
+import { CurrencyPipe } from '@angular/common';
 
 @Component({
   selector: 'app-booking',
-  imports: [FormsModule],
+  imports: [FormsModule, CurrencyPipe],
   templateUrl: './booking.html',
   styleUrl: './booking.css',
 })
@@ -33,6 +34,10 @@ export class Booking {
     const flightId = Number(this.route.snapshot.paramMap.get('flightId'));
 
     this.flight = this.flightService.getFlightById(flightId);
+  }
+
+  get reservationTotal(): number {
+    return this.flight?.price ?? 0;
   }
 
   confirmBooking(): void {
