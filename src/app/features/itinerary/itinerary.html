@@ -137,7 +137,9 @@
             <div>
               <p class="text-xs font-bold uppercase tracking-wider text-slate-400">Total</p>
 
-              <p class="mt-1 font-bold">${{ reservation.total }}</p>
+              <p class="mt-1 font-bold">
+                {{ reservation.total | currency }}
+              </p>
             </div>
           </div>
 

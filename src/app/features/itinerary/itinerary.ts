@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
-
+import { CurrencyPipe } from '@angular/common';
 import { Reservation } from '../../models/reservation';
 import { ReservationService } from '../../core/services/reservation-service';
 
 @Component({
   selector: 'app-itinerary',
-  imports: [RouterLink],
+  imports: [RouterLink, CurrencyPipe],
   templateUrl: './itinerary.html',
   styleUrl: './itinerary.css',
 })
