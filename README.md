@@ -1,59 +1,156 @@
-# AirlineReservationsGroup3
+# Airline Reservation System UI
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 22.1.2.
+This repository contains the Angular user interface for the Group 3 Airline Reservation System developed for CS492.
 
-## Development server
+## Live Application
 
-To start a local development server, run:
+The Sprint 1 application is deployed at:
+
+https://airlinereservationgroup3.netlify.app
+
+## Sprint 1 Functionality
+
+The current user interface demonstrates the planned Sprint 1 features, including:
+
+- User registration
+- User login
+- Flight search
+- Flight search criteria
+- Flight-details display
+- Form validation and user feedback
+- Responsive page layouts
+- Navigation between the primary application views
+
+## Current Development Status
+
+The deployed application is a functional Angular front-end prototype. At this stage, most business logic is handled within the user interface.
+
+The Spring Boot API and database integration are still under development. Future work will move business rules into the backend service layer and connect the Angular application to the API for authentication, flight data, reservations, validation, and persistent data storage.
+
+## Technology
+
+- Angular
+- TypeScript
+- HTML
+- CSS
+- Angular CLI 22.1.2
+- npm
+- Netlify
+
+## Requirements
+
+Install the following software before running the project locally:
+
+- Node.js
+- npm
+- Angular CLI, if running Angular commands directly
+- A modern web browser
+
+Verify the installations with:
+
+```bash
+node --version
+npm --version
+ng version
+```
+
+## Local Installation
+
+1. Extract the submitted project files.
+2. Open a terminal in the Angular UI project directory.
+3. Install the project dependencies:
+
+```bash
+npm install
+```
+
+## Running the Application
+
+Start the local development server with:
+
+```bash
+npm start
+```
+
+Alternatively, use:
 
 ```bash
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Open the following address in a browser:
 
-## Code scaffolding
+http://localhost:4200
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+The development server automatically reloads the application when source files are changed.
 
-```bash
-ng generate component component-name
-```
+## Production Build
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+Create a production build with:
 
 ```bash
-ng generate --help
+npm run build
 ```
 
-## Building
-
-To build the project run:
+Alternatively, use:
 
 ```bash
 ng build
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+Angular places the compiled files in the `dist/` directory.
 
-## Running unit tests
+## Running Tests
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
+Run the configured unit tests with:
 
 ```bash
-ng e2e
+npm test
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+Testing results and known limitations should be reviewed before the final submission.
 
-## Additional Resources
+## Project Structure
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+The main Angular source code is located under:
+
+```text
+src/
+├── app/
+├── assets/
+├── index.html
+├── main.ts
+└── styles.css
+```
+
+The `app` directory contains the application components, services, models, routes, and other user-interface logic.
+
+## Backend API
+
+The Spring Boot API is maintained separately from this Angular UI. Because the API remains under development, the deployed Sprint 1 application does not yet demonstrate complete backend or database integration.
+
+Refer to the backend project README for API setup, configuration, and startup instructions.
+
+## Submission Notes
+
+The source-code submission should include the Angular source files and configuration files required to install, build, and run the application.
+
+Do not include:
+
+- `node_modules/`
+- `.git/`
+- Real `.env` files
+- Passwords
+- API keys
+- Database credentials
+- SMTP credentials
+- JWT secrets
+
+Dependencies can be restored by running `npm install`.
+
+## Group Information
+
+**Course:** CS492
+**Project:** Airline Reservation System
+**Team:** Group 3
+**Sprint:** Sprint 1
