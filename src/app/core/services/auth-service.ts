@@ -22,20 +22,23 @@ export class AuthService {
   constructor(private http: HttpClient) {}
 
   register(request: RegisterRequest): Observable<AuthResponse> {
-    return this.http.post<User>(`${this.apiUrl}/register`, request).pipe(
+    return this.http.post<User>(`${this.apiUrl}/register`, request, { withCredentials: true }).pipe(
       map((user) => this.createResponse(user)),
       tap((response) => this.saveSession(response)),
     );
   }
 
   login(request: LoginRequest): Observable<AuthResponse> {
-    return this.http.post<User>(`${this.apiUrl}/login`, request).pipe(
+    return this.http.post<User>(`${this.apiUrl}/login`, request, { withCredentials: true }).pipe(
       map((user) => this.createResponse(user)),
       tap((response) => this.saveSession(response)),
     );
   }
 
   logout(): void {
+    this.http.post<void>(`${this.apiUrl}/logout`, null, { withCredentials: true }).subscribe({
+      error: (error) => console.error('Unable to end server session:', error),
+    });
     localStorage.removeItem(this.sessionKey);
     sessionStorage.removeItem('currentReservation');
 

@@ -35,7 +35,7 @@ export class ReservationService {
       seatPreference: passenger.seatPreference,
     };
 
-    return this.http.post<ReservationApiResponse>(this.apiUrl, request).pipe(
+    return this.http.post<ReservationApiResponse>(this.apiUrl, request, { withCredentials: true }).pipe(
       map((response) => this.mapReservation(response)),
       tap((reservation) => {
         this.currentReservation = reservation;
@@ -49,12 +49,12 @@ export class ReservationService {
     const params = new HttpParams().set('userEmail', userEmail);
 
     return this.http
-      .get<ReservationApiResponse[]>(this.apiUrl, { params })
+      .get<ReservationApiResponse[]>(this.apiUrl, { params, withCredentials: true })
       .pipe(map((responses) => responses.map((response) => this.mapReservation(response))));
   }
 
   getReservation(confirmationNumber: string): Observable<Reservation> {
-    return this.http.get<ReservationApiResponse>(`${this.apiUrl}/${confirmationNumber}`).pipe(
+    return this.http.get<ReservationApiResponse>(`${this.apiUrl}/${confirmationNumber}`, { withCredentials: true }).pipe(
       map((response) => this.mapReservation(response)),
       tap((reservation) => {
         this.currentReservation = reservation;
@@ -68,6 +68,7 @@ export class ReservationService {
     return this.http
       .patch<ReservationApiResponse>(`${this.apiUrl}/${confirmationNumber}/cancel`, null, {
         params,
+        withCredentials: true,
       })
       .pipe(
         map((response) => this.mapReservation(response)),
