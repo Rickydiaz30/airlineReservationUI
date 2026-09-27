@@ -8,12 +8,13 @@ import {
   Reservation,
   ReservationApiResponse,
 } from '../../models/reservation';
+import { API_BASE_URL } from '../api-base-url';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ReservationService {
-  private readonly apiUrl = 'http://localhost:8081/api/reservations';
+  private readonly apiUrl = `${API_BASE_URL}/reservations`;
 
   private currentReservation?: Reservation;
 

@@ -6,12 +6,13 @@ import { AuthResponse } from '../../models/auth/auth-response';
 import { LoginRequest } from '../../models/auth/login-request';
 import { RegisterRequest } from '../../models/auth/register-request';
 import { User } from '../../models/auth/user';
+import { API_BASE_URL } from '../api-base-url';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private readonly apiUrl = 'http://localhost:8081/api/auth';
+  private readonly apiUrl = `${API_BASE_URL}/auth`;
 
   private readonly sessionKey = 'airlineAuthSession';
 
