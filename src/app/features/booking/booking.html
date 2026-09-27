@@ -84,7 +84,7 @@
       <div
         class="rounded-3xl border border-white/50 bg-white/90 p-6 text-slate-900 shadow-2xl shadow-sky-950/20 backdrop-blur-xl"
       >
-        <form class="space-y-5" (ngSubmit)="confirmBooking()">
+        <form class="space-y-5" (ngSubmit)="confirmBooking()" #bookingForm="ngForm">
           <div>
             <p class="text-xs font-bold uppercase tracking-[0.2em] text-sky-600">
               Traveler information
@@ -224,11 +224,15 @@
           </div>
 
           <!-- Confirm -->
+          @if (submitError) {
+            <p class="text-sm font-semibold text-red-700" role="alert">{{ submitError }}</p>
+          }
           <button
             type="submit"
+            [disabled]="bookingForm.invalid || isSubmitting"
             class="w-full rounded-2xl bg-sky-600 px-5 py-4 text-sm font-bold text-white shadow-lg shadow-sky-600/25 transition hover:bg-sky-700 hover:shadow-xl active:scale-[0.98]"
           >
-            Confirm Booking
+            {{ isSubmitting ? 'Confirming...' : 'Confirm Booking' }}
           </button>
         </form>
       </div>

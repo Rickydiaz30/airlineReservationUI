@@ -26,6 +26,10 @@ export const routes: Routes = [
     component: Confirmation,
   },
   {
+    path: 'confirmation/:confirmationNumber',
+    component: Confirmation,
+  },
+  {
     path: 'my-booking',
     component: Itinerary,
   },

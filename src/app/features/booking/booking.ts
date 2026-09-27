@@ -97,11 +97,8 @@ export class Booking {
       .createReservation(user.email, this.flight.id, this.passenger)
       .subscribe({
         next: (reservation) => {
-          console.log('Reservation created:', reservation);
-
           this.isSubmitting = false;
-
-          this.router.navigate(['/confirmation']);
+          this.router.navigate(['/confirmation', reservation.confirmationNumber]);
         },
         error: (error) => {
           console.error('Unable to create reservation:', error);

@@ -1,4 +1,6 @@
-@if (reservation) {
+@if (isLoading) {
+  <p class="py-12 text-center text-white" role="status">Loading your reservation...</p>
+} @else if (reservation) {
   <section class="py-8 text-white">
     <!-- Success heading -->
     <div class="mb-8 text-center">
@@ -201,7 +203,11 @@
       <h1 class="text-2xl font-bold">No reservation found</h1>
 
       <p class="mt-3 text-sm text-slate-500">
-        Search for a flight and complete a reservation first.
+        @if (loadError) {
+          We couldn't load this reservation. Please check the confirmation number or try again.
+        } @else {
+          Search for a flight and complete a reservation first.
+        }
       </p>
 
       <a

@@ -10,7 +10,11 @@
     </p>
   </div>
 
-  @if (reservations.length > 0) {
+  @if (isLoading) {
+    <p class="py-12 text-center" role="status">Loading your itinerary...</p>
+  } @else if (loadError) {
+    <p class="py-12 text-center" role="alert">We couldn't load your itinerary. Please sign in and try again.</p>
+  } @else if (reservations.length > 0) {
     <div class="space-y-6">
       @for (reservation of reservations; track reservation.confirmationNumber) {
         <div
