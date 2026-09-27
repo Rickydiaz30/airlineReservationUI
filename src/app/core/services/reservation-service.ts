@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, map, tap } from 'rxjs';
+import { Observable, map, switchMap, tap } from 'rxjs';
 
 import { Passenger } from '../../models/passenger';
 import {
@@ -36,7 +36,11 @@ export class ReservationService {
       seatPreference: passenger.seatPreference,
     };
 
-    return this.http.post<ReservationApiResponse>(this.apiUrl, request, { withCredentials: true }).pipe(
+    return this.csrfToken().pipe(switchMap((token) =>
+      this.http.post<ReservationApiResponse>(this.apiUrl, request, {
+        withCredentials: true,
+        headers: { 'X-CSRF-TOKEN': token },
+      })),
       map((response) => this.mapReservation(response)),
       tap((reservation) => {
         this.currentReservation = reservation;
@@ -66,11 +70,12 @@ export class ReservationService {
   cancelReservation(confirmationNumber: string, userEmail: string): Observable<Reservation> {
     const params = new HttpParams().set('userEmail', userEmail);
 
-    return this.http
+    return this.csrfToken().pipe(switchMap((token) => this.http
       .patch<ReservationApiResponse>(`${this.apiUrl}/${confirmationNumber}/cancel`, null, {
         params,
         withCredentials: true,
-      })
+        headers: { 'X-CSRF-TOKEN': token },
+      })))
       .pipe(
         map((response) => this.mapReservation(response)),
         tap((reservation) => {
@@ -101,6 +106,12 @@ export class ReservationService {
 
       return undefined;
     }
+  }
+
+  private csrfToken(): Observable<string> {
+    return this.http.get<{ token: string }>(`${API_BASE_URL}/auth/csrf`, {
+      withCredentials: true,
+    }).pipe(map(({ token }) => token));
   }
 
   private mapReservation(response: ReservationApiResponse): Reservation {
