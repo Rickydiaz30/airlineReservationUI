@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LucidePlane } from '@lucide/angular';
-import { FormsModule } from '@angular/forms';
-import { Flight } from '../../models/flight';
+
 import { FlightService } from '../../core/services/flight-service';
+import { Flight } from '../../models/flight';
 
 @Component({
   selector: 'app-flight-results',
@@ -17,6 +18,7 @@ export class FlightResults {
   departureDate = '';
   returnDate = '';
   travelers = 1;
+
   filterOrigin = '';
   filterDestination = '';
   maxPrice?: number;
@@ -48,6 +50,7 @@ export class FlightResults {
     private route: ActivatedRoute,
     private router: Router,
     private flightService: FlightService,
+    private changeDetector: ChangeDetectorRef,
   ) {
     this.route.queryParams.subscribe((params) => {
       this.origin = params['origin'] ?? '';
@@ -56,18 +59,48 @@ export class FlightResults {
       this.returnDate = params['returnDate'] ?? '';
       this.travelers = Number(params['travelers']) || 1;
 
-      if (this.origin && this.destination && this.departureDate) {
-        this.allFlights = this.flightService.searchFlights(
-          this.origin,
-          this.destination,
-          this.departureDate,
-        );
-      } else {
-        this.allFlights = this.flightService.getFlights();
-      }
-
-      this.flights = [...this.allFlights];
+      this.loadFlights();
     });
+  }
+
+  private loadFlights(): void {
+    if (this.origin && this.destination && this.departureDate) {
+      this.flightService
+        .searchFlights(this.origin, this.destination, this.departureDate)
+        .subscribe({
+          next: (flights) => {
+            this.setFlights(flights);
+            this.changeDetector.detectChanges();
+          },
+          error: (error) => {
+            console.error('Unable to search flights:', error);
+
+            this.setFlights([]);
+            this.changeDetector.detectChanges();
+          },
+        });
+
+      return;
+    }
+
+    this.flightService.getFlights().subscribe({
+      next: (flights) => {
+        this.setFlights(flights);
+        this.changeDetector.detectChanges();
+      },
+      error: (error) => {
+        console.error('Unable to load flights:', error);
+
+        this.setFlights([]);
+        this.changeDetector.detectChanges();
+      },
+    });
+  }
+
+  private setFlights(flights: Flight[]): void {
+    this.allFlights = flights;
+    this.flights = [...flights];
+    this.currentPage = 1;
   }
 
   selectFlight(flightId: number): void {
@@ -78,26 +111,27 @@ export class FlightResults {
     let filteredFlights = [...this.allFlights];
 
     if (this.filterOrigin.trim()) {
-      filteredFlights = filteredFlights.filter(
-        (flight) => flight.origin.toLowerCase() === this.filterOrigin.trim().toLowerCase(),
-      );
+      const origin = this.filterOrigin.trim().toLowerCase();
+
+      filteredFlights = filteredFlights.filter((flight) => flight.origin.toLowerCase() === origin);
     }
 
     if (this.filterDestination.trim()) {
+      const destination = this.filterDestination.trim().toLowerCase();
+
       filteredFlights = filteredFlights.filter(
-        (flight) =>
-          flight.destination.toLowerCase() === this.filterDestination.trim().toLowerCase(),
+        (flight) => flight.destination.toLowerCase() === destination,
       );
     }
 
-    if (this.maxPrice) {
+    if (this.maxPrice !== undefined) {
       filteredFlights = filteredFlights.filter((flight) => flight.price <= this.maxPrice!);
     }
 
     if (this.stopsFilter !== 'all') {
-      filteredFlights = filteredFlights.filter(
-        (flight) => flight.stops === Number(this.stopsFilter),
-      );
+      const numberOfStops = Number(this.stopsFilter);
+
+      filteredFlights = filteredFlights.filter((flight) => flight.stops === numberOfStops);
     }
 
     if (this.sortBy === 'price-low') {
@@ -115,6 +149,7 @@ export class FlightResults {
     }
 
     this.flights = filteredFlights;
+    this.currentPage = 1;
   }
 
   private durationToMinutes(duration: string): number {
@@ -135,5 +170,9 @@ export class FlightResults {
     const end = start + this.pageSize;
 
     return this.flights.slice(start, end);
+  }
+
+  changeSearch(): void {
+    this.router.navigate(['/']);
   }
 }

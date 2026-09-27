@@ -13,72 +13,47 @@
   <section
     class="mb-6 rounded-3xl border border-white/40 bg-white/90 p-5 text-slate-900 shadow-xl backdrop-blur-xl"
   >
-    <div class="grid gap-4 md:grid-cols-5">
-      <!-- Origin -->
-      <div>
-        <label
-          for="filterOrigin"
-          class="mb-2 block text-xs font-bold uppercase tracking-wider text-slate-500"
-        >
-          Origin
-        </label>
+    <div class="mb-4">
+      <p class="text-xs font-bold uppercase tracking-[0.2em] text-sky-600">Refine results</p>
 
-        <select
-          id="filterOrigin"
-          [(ngModel)]="filterOrigin"
-          class="w-full appearance-auto rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none focus:border-sky-500 focus:ring-4 focus:ring-sky-100"
-        >
-          <option value="">All Origins</option>
+      <p class="mt-1 text-sm text-slate-500">
+        {{ origin }} to {{ destination }} on {{ departureDate }}
+      </p>
+    </div>
 
-          @for (airport of airports; track airport.code) {
-            <option [value]="airport.code">{{ airport.code }} — {{ airport.city }}</option>
-          }
-        </select>
-      </div>
-
-      <!-- Destination -->
-      <div>
-        <label
-          for="filterDestination"
-          class="mb-2 block text-xs font-bold uppercase tracking-wider text-slate-500"
-        >
-          Destination
-        </label>
-
-        <select
-          id="filterDestination"
-          [(ngModel)]="filterDestination"
-          class="w-full appearance-auto rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none focus:border-sky-500 focus:ring-4 focus:ring-sky-100"
-        >
-          <option value="">All Destinations</option>
-
-          @for (airport of airports; track airport.code) {
-            <option [value]="airport.code">{{ airport.code }} — {{ airport.city }}</option>
-          }
-        </select>
-      </div>
-
+    <div class="grid gap-4 md:grid-cols-3">
       <!-- Max Price -->
       <div>
-        <label class="mb-2 block text-xs font-bold uppercase tracking-wider text-slate-500">
+        <label
+          for="maxPrice"
+          class="mb-2 block text-xs font-bold uppercase tracking-wider text-slate-500"
+        >
           Max Price
         </label>
 
         <input
+          id="maxPrice"
+          name="maxPrice"
           type="number"
+          min="0"
           [(ngModel)]="maxPrice"
-          placeholder="500"
+          placeholder="No maximum"
           class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none focus:border-sky-500 focus:ring-4 focus:ring-sky-100"
         />
       </div>
 
       <!-- Stops -->
       <div>
-        <label class="mb-2 block text-xs font-bold uppercase tracking-wider text-slate-500">
+        <label
+          for="stopsFilter"
+          class="mb-2 block text-xs font-bold uppercase tracking-wider text-slate-500"
+        >
           Stops
         </label>
 
         <select
+          id="stopsFilter"
+          name="stopsFilter"
           [(ngModel)]="stopsFilter"
           class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none focus:border-sky-500 focus:ring-4 focus:ring-sky-100"
         >
@@ -90,11 +65,16 @@
 
       <!-- Sort -->
       <div>
-        <label class="mb-2 block text-xs font-bold uppercase tracking-wider text-slate-500">
+        <label
+          for="sortBy"
+          class="mb-2 block text-xs font-bold uppercase tracking-wider text-slate-500"
+        >
           Sort
         </label>
 
         <select
+          id="sortBy"
+          name="sortBy"
           [(ngModel)]="sortBy"
           class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none focus:border-sky-500 focus:ring-4 focus:ring-sky-100"
         >
@@ -105,7 +85,15 @@
       </div>
     </div>
 
-    <div class="mt-4 flex justify-end">
+    <div class="mt-4 flex flex-col gap-3 sm:flex-row sm:justify-between">
+      <button
+        type="button"
+        (click)="changeSearch()"
+        class="rounded-2xl border border-sky-600 px-6 py-3 text-sm font-bold text-sky-700 transition hover:bg-sky-50"
+      >
+        Change Search
+      </button>
+
       <button
         type="button"
         (click)="applyFilters()"

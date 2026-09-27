@@ -1,73 +1,124 @@
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable, map, tap } from 'rxjs';
 
-import { Reservation } from '../../models/reservation';
-import { Flight } from '../../models/flight';
 import { Passenger } from '../../models/passenger';
+import {
+  CreateReservationRequest,
+  Reservation,
+  ReservationApiResponse,
+} from '../../models/reservation';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ReservationService {
-  private readonly storageKey = 'airlineReservations';
+  private readonly apiUrl = 'http://localhost:8081/api/reservations';
 
-  // Load existing reservations when the application starts.
-  private reservations: Reservation[] = this.loadReservations();
+  private currentReservation?: Reservation;
 
-  createReservation(flight: Flight, passenger: Passenger): Reservation {
-    const reservation: Reservation = {
-      confirmationNumber: this.generateConfirmationNumber(),
-      status: 'CONFIRMED',
+  constructor(private http: HttpClient) {}
 
-      // Store copies so later form changes do not alter the reservation.
-      flight: { ...flight },
-      passenger: { ...passenger },
-
-      total: flight.price,
+  createReservation(
+    userEmail: string,
+    flightId: number,
+    passenger: Passenger,
+  ): Observable<Reservation> {
+    const request: CreateReservationRequest = {
+      userEmail,
+      flightId,
+      passengerFirstName: passenger.firstName,
+      passengerLastName: passenger.lastName,
+      passengerEmail: passenger.email,
+      passengerPhone: passenger.phone,
+      passengerDateOfBirth: passenger.dateOfBirth,
+      seatPreference: passenger.seatPreference,
     };
 
-    this.reservations.push(reservation);
-    this.saveReservations();
+    return this.http.post<ReservationApiResponse>(this.apiUrl, request).pipe(
+      map((response) => this.mapReservation(response)),
+      tap((reservation) => {
+        this.currentReservation = reservation;
 
-    return reservation;
+        sessionStorage.setItem('currentReservation', JSON.stringify(reservation));
+      }),
+    );
   }
 
-  // Used by My Itinerary
-  getReservations(): Reservation[] {
-    return this.reservations;
+  getReservations(userEmail: string): Observable<Reservation[]> {
+    const params = new HttpParams().set('userEmail', userEmail);
+
+    return this.http
+      .get<ReservationApiResponse[]>(this.apiUrl, { params })
+      .pipe(map((responses) => responses.map((response) => this.mapReservation(response))));
   }
 
-  // Used by Confirmation page
+  getReservation(confirmationNumber: string): Observable<Reservation> {
+    return this.http.get<ReservationApiResponse>(`${this.apiUrl}/${confirmationNumber}`).pipe(
+      map((response) => this.mapReservation(response)),
+      tap((reservation) => {
+        this.currentReservation = reservation;
+      }),
+    );
+  }
+
+  cancelReservation(confirmationNumber: string, userEmail: string): Observable<Reservation> {
+    const params = new HttpParams().set('userEmail', userEmail);
+
+    return this.http
+      .patch<ReservationApiResponse>(`${this.apiUrl}/${confirmationNumber}/cancel`, null, {
+        params,
+      })
+      .pipe(
+        map((response) => this.mapReservation(response)),
+        tap((reservation) => {
+          this.currentReservation = reservation;
+
+          sessionStorage.setItem('currentReservation', JSON.stringify(reservation));
+        }),
+      );
+  }
+
   getCurrentReservation(): Reservation | undefined {
-    return this.reservations.at(-1);
-  }
+    if (this.currentReservation) {
+      return this.currentReservation;
+    }
 
-  private saveReservations(): void {
-    localStorage.setItem(this.storageKey, JSON.stringify(this.reservations));
-  }
+    const savedReservation = sessionStorage.getItem('currentReservation');
 
-  private loadReservations(): Reservation[] {
-    const savedReservations = localStorage.getItem(this.storageKey);
-
-    if (!savedReservations) {
-      return [];
+    if (!savedReservation) {
+      return undefined;
     }
 
     try {
-      return JSON.parse(savedReservations) as Reservation[];
+      this.currentReservation = JSON.parse(savedReservation) as Reservation;
+
+      return this.currentReservation;
     } catch (error) {
-      console.error('Could not load saved reservations:', error);
-      return [];
+      console.error('Could not restore current reservation:', error);
+
+      return undefined;
     }
   }
 
-  private generateConfirmationNumber(): string {
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    let code = '';
-
-    for (let i = 0; i < 6; i++) {
-      code += characters.charAt(Math.floor(Math.random() * characters.length));
-    }
-
-    return `NIM-${code}`;
+  private mapReservation(response: ReservationApiResponse): Reservation {
+    return {
+      id: response.id,
+      confirmationNumber: response.confirmationNumber,
+      userEmail: response.userEmail,
+      status: response.status,
+      flight: response.flight,
+      passenger: {
+        firstName: response.passengerFirstName,
+        lastName: response.passengerLastName,
+        email: response.passengerEmail,
+        phone: response.passengerPhone ?? '',
+        dateOfBirth: response.passengerDateOfBirth,
+        seatPreference: response.seatPreference.toLowerCase() as Passenger['seatPreference'],
+      },
+      total: response.totalPrice,
+      bookedAt: response.bookedAt,
+      cancelledAt: response.cancelledAt,
+    };
   }
 }

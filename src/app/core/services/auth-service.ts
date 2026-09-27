@@ -1,6 +1,6 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable, signal } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { delay } from 'rxjs/operators';
+import { Observable, map, tap } from 'rxjs';
 
 import { AuthResponse } from '../../models/auth/auth-response';
 import { LoginRequest } from '../../models/auth/login-request';
@@ -11,59 +11,46 @@ import { User } from '../../models/auth/user';
   providedIn: 'root',
 })
 export class AuthService {
+  private readonly apiUrl = 'http://localhost:8081/api/auth';
+
   private readonly sessionKey = 'airlineAuthSession';
 
   private readonly currentUserSignal = signal<User | null>(this.loadCurrentUser());
 
   readonly currentUser = this.currentUserSignal.asReadonly();
 
+  constructor(private http: HttpClient) {}
+
   register(request: RegisterRequest): Observable<AuthResponse> {
-    const user: User = {
-      id: Date.now(),
-      firstName: request.firstName,
-      lastName: request.lastName,
-      email: request.email,
-      role: 'CUSTOMER',
-    };
-
-    const response: AuthResponse = {
-      user,
-      token: 'demo-registration-token',
-    };
-
-    this.saveSession(response);
-
-    return of(response).pipe(delay(500));
+    return this.http.post<User>(`${this.apiUrl}/register`, request).pipe(
+      map((user) => this.createResponse(user)),
+      tap((response) => this.saveSession(response)),
+    );
   }
 
   login(request: LoginRequest): Observable<AuthResponse> {
-    const username = request.email.split('@')[0].trim();
-
-    const user: User = {
-      id: 1,
-      firstName: username,
-      lastName: '',
-      email: request.email,
-      role: 'CUSTOMER',
-    };
-
-    const response: AuthResponse = {
-      user,
-      token: 'demo-login-token',
-    };
-
-    this.saveSession(response);
-
-    return of(response).pipe(delay(500));
+    return this.http.post<User>(`${this.apiUrl}/login`, request).pipe(
+      map((user) => this.createResponse(user)),
+      tap((response) => this.saveSession(response)),
+    );
   }
 
   logout(): void {
     localStorage.removeItem(this.sessionKey);
+    sessionStorage.removeItem('currentReservation');
+
     this.currentUserSignal.set(null);
   }
 
   isLoggedIn(): boolean {
     return this.currentUserSignal() !== null;
+  }
+
+  private createResponse(user: User): AuthResponse {
+    return {
+      user,
+      token: '',
+    };
   }
 
   private saveSession(response: AuthResponse): void {
@@ -85,6 +72,7 @@ export class AuthService {
       return response.user;
     } catch {
       localStorage.removeItem(this.sessionKey);
+
       return null;
     }
   }

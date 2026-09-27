@@ -11,7 +11,15 @@
     </p>
   </div>
 
-  @if (flight) {
+  @if (isLoading) {
+    <div
+      class="rounded-3xl border border-white/40 bg-white/90 p-8 text-center text-slate-900 shadow-xl backdrop-blur-xl"
+    >
+      <h2 class="text-xl font-bold">Loading flight...</h2>
+
+      <p class="mt-2 text-sm text-slate-500">Retrieving your selected flight.</p>
+    </div>
+  } @else if (flight) {
     <div class="grid gap-6 lg:grid-cols-[1fr_1.2fr]">
       <!-- Flight Summary -->
       <aside

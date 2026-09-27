@@ -12,4 +12,7 @@ export interface Flight {
   duration: string;
   stops: number;
   price: number;
+  availableSeats: number;
+  status: string;
+  gate: string;
 }
